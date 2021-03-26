@@ -4,7 +4,7 @@ import React , {useState,useEffect}from "react";
 import {
   StyleSheet,
   Text,
-  View,
+  View,Button,
   TextInput,
   Dimensions,
   FlatList,
@@ -27,7 +27,7 @@ const DATA = [...Array(30).keys()].map((_, i) => {
 });
 
 export default function App() {
-  const [clicked,setClicked] = useState(false);
+  const [clicked,setClicked] = useState({key:"",click: false});
 
   return (
     <View style={[styles.container,{marginTop:32}]}>
@@ -44,9 +44,18 @@ export default function App() {
                     return (
                         <View
                             key={item.key}
-                            style={styles.filmitem}
+                            style={[styles.filmitem,{
+                              backgroundColor: clicked.click ? "lightblue" : "green"}]}
                         >
-                      <Text style={{fontSize:16,fontWeight:"bold",}}>{item.name}</Text>
+                      <Text style={{fontSize:16,fontWeight:"bold",marginRight:"auto"}}>{item.name}</Text>
+                      <Button
+                          style={{marginRight: "auto" ,height:48, width:64 , alignSelf: "end"}}
+                          title="Press me"
+                          onPress={() => {
+                            setClicked({key: item.key, click: !clicked.click});
+                            console.log(clicked);
+                          }}
+                      />
                     </View>
                     );
                   }}
@@ -72,7 +81,9 @@ const styles = StyleSheet.create({
     // backgroundColor: "#cc35"
   },
   filmitem:{
-    backgroundColor: "lightblue",
+    height: 150,
+    display:"flex",
+    flexDirection: "row",
     marginVertical: 4,
     padding: 10,
     borderRadius: 12,
