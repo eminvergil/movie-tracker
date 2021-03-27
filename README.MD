@@ -5,7 +5,7 @@
       - https://www.themoviedb.org/documentation/api
       - https://seriesgui.de/api/reference/
       - movie scrape to json using python
-      -
+      - https://www.boxofficemojo.com/year/world/2021/ --->> scrape ref
 
 ## uygulama yapilirken tasarım referansları
 
