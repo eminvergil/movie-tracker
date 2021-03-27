@@ -13,6 +13,7 @@ import {
 } from "react-native";
 
 import faker from "faker";
+import { Select } from "./components";
 
 faker.seed(10);
 
@@ -33,28 +34,26 @@ export default function App() {
   const [clicked, setClicked] = useState([{ key: "", click: "", name: "" }]);
 
   useEffect(() => {
+    //assigning DATA array to state
     for (let i = 0; i < ARRAY_LENG; i++) {
       clicked[i] = { key: DATA[i].key, click: false, name: DATA[i].name };
     }
-
-    // for (let i = 0; i < 30; i++) {
-    //   console.log(clicked[i]);
-
-    //   console.log(DATA[i]);
-    // }
-
-    console.log(clicked);
-
-    // DATA.forEach((item, index) => {
-    //   setClicked([{ key: item.key, click: false, name: item.name }]);
-    // });
   }, []);
 
   return (
     <View style={[styles.container, { marginTop: 32 }]}>
-      <Text style={{ fontSize: 24, justifySelf: "center" }}>
+      <Text
+        style={{
+          fontSize: 32,
+          justifySelf: "center",
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+      >
         Movie Tracker App
       </Text>
+
+      <Select />
 
       <View style={styles.movielist}>
         <FlatList
@@ -93,9 +92,8 @@ export default function App() {
                   title="Press me"
                   onPress={() => {
                     const _item = clicked.findIndex((it) => it.key == item.key);
-                    // .filter((x) => x.true);
 
-                    console.log(_item);
+                    // console.log(_item);
 
                     let new_copy = [...clicked];
 
@@ -105,11 +103,6 @@ export default function App() {
                     };
 
                     setClicked(new_copy);
-
-                    // setClicked(items);
-                    // console.log(item.key);
-
-                    // setClicked(items);
                   }}
                 />
               </View>
