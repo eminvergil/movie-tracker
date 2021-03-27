@@ -13,3 +13,9 @@
       - https://www.youtube.com/watch?v=nEntsYyCbLM&t=1s
       - https://www.youtube.com/watch?v=F8x-dyIsrJ8&t=139s
       - https://github.com/eminvergil/expo-food
+
+## todo list
+
+      - firebase paketi yukle https://rnfirebase.io/auth/usage
+      - auth test et
+      -
