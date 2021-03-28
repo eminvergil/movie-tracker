@@ -16,6 +16,6 @@
 
 ## todo list
 
-      - firebase paketi yukle https://rnfirebase.io/auth/usage
+      <!-- - firebase paketi yukle https://rnfirebase.io/auth/usage -->
       - auth test et
       -
