@@ -23,6 +23,7 @@ export default function Select({}) {
       <View style={styles.margin}>
         <Button
           title="Watched"
+          disabled={watched}
           color={watched ? "green" : "red"}
           onPress={() => setWatched(!watched)}
           //     style={{ color: watched ? "red" : "yellow" }}
@@ -31,6 +32,7 @@ export default function Select({}) {
       <View style={styles.margin}>
         <Button
           title="NOT Watched"
+          disabled={!watched}
           color={!watched ? "green" : "red"}
           onPress={() => setWatched(!watched)}
         />

@@ -6,7 +6,7 @@ faker.seed(10);
 export const windowWidth = Dimensions.get("window").width;
 export const windowHeight = Dimensions.get("window").height;
 
-export const ARRAY_LENGTH = 10;
+export const ARRAY_LENGTH = 15;
 
 // key , name
 export const DATA = [...Array(ARRAY_LENGTH).keys()].map((_, i) => {

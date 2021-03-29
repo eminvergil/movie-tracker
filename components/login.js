@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 import auth from "@react-native-firebase/auth";
 
-export default function login() {
+export default function Login() {
+  // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
 
+  // Handle user state changes
   function onAuthStateChanged(user) {
     setUser(user);
     if (initializing) setInitializing(false);
@@ -16,9 +18,19 @@ export default function login() {
     return subscriber; // unsubscribe on unmount
   }, []);
 
+  if (initializing) return null;
+
+  if (!user) {
+    return (
+      <View>
+        <Text>Login</Text>
+      </View>
+    );
+  }
+
   return (
     <View>
-      <Text>hello from login comp</Text>
+      <Text>Welcome {user && user.email}</Text>
     </View>
   );
 }
