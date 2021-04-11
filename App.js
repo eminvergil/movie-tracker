@@ -9,6 +9,7 @@ import {
 } from "./data/helpers";
 
 import DATA from "./data/context-filmovie.json"
+import WATCHED from "./data/watched.json"
 
 export default function App() {
     const [clicked, setClicked] = useState([{
@@ -57,7 +58,7 @@ export default function App() {
 
             <Select/>
 
-            <Movies clicked={clicked} setClicked={setClicked}/>
+            <Movies clicked={clicked} setClicked={setClicked} watched={WATCHED}/>
         </View>
     );
 }

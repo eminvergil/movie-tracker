@@ -1,18 +1,32 @@
-import React, {useState} from "react";
+import React , {useEffect} from "react";
 
 import {
     StyleSheet,
     Text,
     View,
-    Button,
-    TextInput,
-    Dimensions,
     FlatList,
     CheckBox,
     Image,
 } from "react-native";
 
-export default function Movies({clicked, setClicked}) {
+export default function Movies({clicked, setClicked,watched}) {
+
+    useEffect(() => {
+        const _item = clicked.findIndex((it) => it.key == watched.key);
+
+        let new_copy = [...clicked];
+
+        new_copy[_item] = {
+            ...new_copy[_item],
+            click: watched[0].click,
+        };
+
+        setClicked(new_copy);
+
+        console.log(new_copy[_item]);
+
+    },[])
+
     return (
         <>
             <View style={styles.movielist}>
@@ -55,7 +69,7 @@ export default function Movies({clicked, setClicked}) {
                                     >
                                         {item.release_date}
                                     </Text>
-                                    <Image source={{uri:item.image}} style={{width:150,height:100}}/>
+                                    <Image source={{uri: item ? item.image : "none"}} style={{width:150,height:100}}/>
 
                                 </View>
 
@@ -69,8 +83,6 @@ export default function Movies({clicked, setClicked}) {
                                     value={item.click}
                                     onValueChange={() => {
                                         const _item = clicked.findIndex((it) => it.key == item.key);
-
-                                        // console.log(_item);
 
                                         let new_copy = [...clicked];
 
