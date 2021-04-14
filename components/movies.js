@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import WATCHED from "../data/watched.json";
 
-export default function Movies({ clicked, setClicked, watched,filtered,setFiltered }) {
+export default function Movies({ clicked, setClicked, watched , setWatched,filtered, setFiltered }) {
   // const filteredMovies = clicked.filter(function (array_el) {
   //   return (
   //     watched.filter(function (anotherOne_el) {
@@ -21,8 +21,17 @@ export default function Movies({ clicked, setClicked, watched,filtered,setFilter
 
 
   useEffect(() => {
+      let filteredMovies = clicked.filter(function (array_el) {
+          return (
+              watched.filter(function (anotherOne_el) {
+                  return anotherOne_el.key == array_el.key;
+              }).length == 0
+          );
+      });
 
-  }, []);
+      // filtered = filteredMovies;
+      setFiltered(filteredMovies);
+  }, [watched]);
 
   return (
     <>
@@ -87,21 +96,14 @@ export default function Movies({ clicked, setClicked, watched,filtered,setFilter
 
                       new_copy[_item] = {
                         ...new_copy[_item],
-                        click: !new_copy[_item].click,
+                        click: true,
                       };
+                      // console.log(new_copy[_item].title,new_copy[_item].click);
 
-                        setClicked(new_copy);
+                      setClicked(new_copy);
 
-                        let filteredMovies = new_copy.filter(function (array_el) {
-                            return (
-                                watched.filter(function (anotherOne_el) {
-                                    return anotherOne_el.key == array_el.key;
-                                }).length == 0
-                            );
-                        });
+                      setWatched([...watched,{key:new_copy[_item].key,title:new_copy[_item].title,click:new_copy[_item].click}])
 
-                        setFiltered(filteredMovies);
-                       // clicked = new_copy;
                     }}
                 />
               </View>

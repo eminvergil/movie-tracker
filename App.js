@@ -21,6 +21,7 @@ export default function App() {
   ]);
 
   const [filtered,setFiltered] = useState();
+  const [watched,setWatched] = useState([]);
 
   useEffect(() => {
     //assigning DATA array to state
@@ -35,17 +36,25 @@ export default function App() {
       };
     }
 
+      for (let i = 0; i < WATCHED.length; i++) {
+          watched[i] = {
+              key: WATCHED[i].key,
+              title: WATCHED[i].title,
+              click: WATCHED[i].click,
+          }
+      }
+
       const filteredMovies = clicked.filter(function (array_el) {
           return (
-              WATCHED.filter(function (anotherOne_el) {
+              watched.filter(function (anotherOne_el) {
                   return anotherOne_el.key == array_el.key;
               }).length == 0
           );
       });
 
-    setFiltered(filteredMovies);
+      setFiltered(filteredMovies);
 
-  }, [clicked,filtered]);
+  }, []);
 
   return (
     <View style={[styles.container, { marginTop: 32 }]}>
@@ -70,7 +79,7 @@ export default function App() {
 
       <Select />
 
-      <Movies clicked={clicked} setClicked={setClicked} watched={WATCHED} filtered={filtered} setFiltered={setFiltered}/>
+      <Movies clicked={clicked} setClicked={setClicked} watched={watched} setWatched={setWatched} filtered={filtered} setFiltered={setFiltered}/>
     </View>
   );
 }
