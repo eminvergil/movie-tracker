@@ -11,8 +11,8 @@ import {
   Image,
 } from "react-native";
 
-export default function Select({}) {
-  const [watched, setWatched] = useState(false);
+export default function Select({selectWatched,setSelectWatched}) {
+  // const [watched, setWatched] = useState(false);
 
   //color
   // red - false
@@ -23,18 +23,18 @@ export default function Select({}) {
       <View style={styles.margin}>
         <Button
           title="Watched"
-          disabled={watched}
-          color={watched ? "green" : "red"}
-          onPress={() => setWatched(!watched)}
+          disabled={selectWatched}
+          color={selectWatched ? "green" : "red"}
+          onPress={() => setSelectWatched(!selectWatched)}
           //     style={{ color: watched ? "red" : "yellow" }}
         />
       </View>
       <View style={styles.margin}>
         <Button
           title="NOT Watched"
-          disabled={!watched}
-          color={!watched ? "green" : "red"}
-          onPress={() => setWatched(!watched)}
+          disabled={!selectWatched}
+          color={selectWatched ? "green" : "red"}
+          onPress={() => setSelectWatched(!selectWatched)}
         />
       </View>
     </View>

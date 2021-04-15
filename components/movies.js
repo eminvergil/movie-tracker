@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect ,useState} from "react";
 
 import {
   StyleSheet,
@@ -10,15 +10,9 @@ import {
 } from "react-native";
 import WATCHED from "../data/watched.json";
 
-export default function Movies({ clicked, setClicked, watched , setWatched,filtered, setFiltered }) {
-  // const filteredMovies = clicked.filter(function (array_el) {
-  //   return (
-  //     watched.filter(function (anotherOne_el) {
-  //       return anotherOne_el.key == array_el.key;
-  //     }).length == 0
-  //   );
-  // });
+export default function Movies({ clicked, setClicked, watched ,setWatched, filtered, setFiltered, selectWatched }) {
 
+    const [movie,setMovie] = useState([]);
 
   useEffect(() => {
       let filteredMovies = clicked.filter(function (array_el) {
@@ -29,6 +23,15 @@ export default function Movies({ clicked, setClicked, watched , setWatched,filte
           );
       });
 
+      let filteredMoviesThatIDidntWatch = clicked.filter(function (array_el) {
+          return (
+              watched.filter(function (anotherOne_el) {
+                  return anotherOne_el.key != array_el.key;
+              }).length == 0
+          );
+      });
+
+      setMovie(filteredMoviesThatIDidntWatch);
       // filtered = filteredMovies;
       setFiltered(filteredMovies);
   }, [watched]);
@@ -37,7 +40,7 @@ export default function Movies({ clicked, setClicked, watched , setWatched,filte
     <>
       <View style={styles.movielist}>
         <FlatList
-          data={filtered}
+          data={ selectWatched ? filtered : watched}
           // horizontal
           showHorizontalScrollIndicator={false}
           contentContainerStyle={{}}

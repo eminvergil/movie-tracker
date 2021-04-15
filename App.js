@@ -22,20 +22,23 @@ export default function App() {
 
   const [filtered,setFiltered] = useState();
   const [watched,setWatched] = useState([]);
+  const [selectWatched,setSelectWatched] = useState(true);
 
   useEffect(() => {
-    //assigning DATA array to state
-    for (let i = 0; i < ARRAY_LENGTH; i++) {
-      clicked[i] = {
-        key: DATA[i].key,
-        click: false,
-        title: DATA[i].title,
-        description: DATA[i].description,
-        image: DATA[i].image,
-        release_date: DATA[i].release_date,
-      };
-    }
+      // init data
+      //assigning DATA array to state
+      for (let i = 0; i < ARRAY_LENGTH; i++) {
+          clicked[i] = {
+            key: DATA[i].key,
+            click: false,
+            title: DATA[i].title,
+            description: DATA[i].description,
+            image: DATA[i].image,
+            release_date: DATA[i].release_date,
+          };
+      }
 
+      // init watched data
       for (let i = 0; i < WATCHED.length; i++) {
           watched[i] = {
               key: WATCHED[i].key,
@@ -51,6 +54,7 @@ export default function App() {
               }).length == 0
           );
       });
+
 
       setFiltered(filteredMovies);
 
@@ -77,9 +81,9 @@ export default function App() {
 
       {/*<Login/>*/}
 
-      <Select />
+      <Select selectWatched={selectWatched} setSelectWatched={setSelectWatched}/>
 
-      <Movies clicked={clicked} setClicked={setClicked} watched={watched} setWatched={setWatched} filtered={filtered} setFiltered={setFiltered}/>
+      <Movies clicked={clicked} setClicked={setClicked} watched={watched} setWatched={setWatched} filtered={filtered} setFiltered={setFiltered} selectWatched={selectWatched} setSelectWatched={setSelectWatched}/>
     </View>
   );
 }
