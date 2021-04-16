@@ -1,4 +1,4 @@
-import React, { useEffect ,useState} from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   StyleSheet,
@@ -10,37 +10,32 @@ import {
 } from "react-native";
 import WATCHED from "../data/watched.json";
 
-export default function Movies({ clicked, setClicked, watched ,setWatched, filtered, setFiltered, selectWatched }) {
-
-    const [movie,setMovie] = useState([]);
-
+export default function Movies({
+  clicked,
+  setClicked,
+  watched,
+  setWatched,
+  filtered,
+  setFiltered,
+  selectWatched,
+}) {
   useEffect(() => {
-      let filteredMovies = clicked.filter(function (array_el) {
-          return (
-              watched.filter(function (anotherOne_el) {
-                  return anotherOne_el.key == array_el.key;
-              }).length == 0
-          );
-      });
+    let filteredMovies = clicked.filter(function (array_el) {
+      return (
+        watched.filter(function (anotherOne_el) {
+          return anotherOne_el.key == array_el.key;
+        }).length == 0
+      );
+    });
 
-      let filteredMoviesThatIDidntWatch = clicked.filter(function (array_el) {
-          return (
-              watched.filter(function (anotherOne_el) {
-                  return anotherOne_el.key != array_el.key;
-              }).length == 0
-          );
-      });
-
-      setMovie(filteredMoviesThatIDidntWatch);
-      // filtered = filteredMovies;
-      setFiltered(filteredMovies);
+    setFiltered(filteredMovies);
   }, [watched]);
 
   return (
     <>
       <View style={styles.movielist}>
         <FlatList
-          data={ selectWatched ? filtered : watched}
+          data={selectWatched ? filtered : watched}
           // horizontal
           showHorizontalScrollIndicator={false}
           contentContainerStyle={{}}
@@ -91,23 +86,29 @@ export default function Movies({ clicked, setClicked, watched ,setWatched, filte
                     justifySelf: "center",
                   }}
                   // title="Press me"
-                    value={item && item.click}
-                    onValueChange={() => {
-                      const _item =  clicked.findIndex((it) => it.key == item.key);
+                  value={item && item.click}
+                  onValueChange={() => {
+                    const _item = clicked.findIndex((it) => it.key == item.key);
 
-                      let new_copy = [...clicked];
+                    let new_copy = [...clicked];
 
-                      new_copy[_item] = {
-                        ...new_copy[_item],
-                        click: true,
-                      };
-                      // console.log(new_copy[_item].title,new_copy[_item].click);
+                    new_copy[_item] = {
+                      ...new_copy[_item],
+                      click: true,
+                    };
+                    // console.log(new_copy[_item].title,new_copy[_item].click);
 
-                      setClicked(new_copy);
+                    setClicked(new_copy);
 
-                      setWatched([...watched,{key:new_copy[_item].key,title:new_copy[_item].title,click:new_copy[_item].click}])
-
-                    }}
+                    setWatched([
+                      ...watched,
+                      {
+                        key: new_copy[_item].key,
+                        title: new_copy[_item].title,
+                        click: new_copy[_item].click,
+                      },
+                    ]);
+                  }}
                 />
               </View>
             );
