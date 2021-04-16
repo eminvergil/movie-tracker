@@ -14,6 +14,8 @@
   "dependencies": {
     "@react-native-firebase/app": "^11.2.0",
     "@react-native-firebase/auth": "^11.2.0",
+    "@react-navigation/native": "^5.9.4",
+    "@react-navigation/stack": "^5.14.4",
     "expo": "~40.0.0",
     "expo-status-bar": "~1.0.3",
     "faker": "^5.4.0",

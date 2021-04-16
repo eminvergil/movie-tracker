@@ -1,9 +1,11 @@
 import React from 'react';
+// import { NavigationContainer } from '@react-navigation/native';
+// import { createStackNavigator } from '@react-navigation/stack';
 
 import {View, Text, StyleSheet, TextInput,Button,TouchableHighlight} from "react-native";
 
 
-const LoginExample = () => {
+const LoginExample = ({navigation}) => {
     return (
         <View style={styles.contain}>
 
@@ -16,6 +18,7 @@ const LoginExample = () => {
                 <Button
                     // onPress={}
                     style={{borderRadius:12}}
+                    onPress={() => navigation.navigate('Home')}
                     title="Login"
                     color="#841584"
                     accessibilityLabel="login button"
