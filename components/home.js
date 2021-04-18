@@ -59,7 +59,7 @@ const Home = () => {
 
 
     return (
-        <View style={[styles.container, { marginTop: 0 }]}>
+        <View style={[styles.container, { marginTop: 0,paddingVertical:24 }]}>
             <Image
                 source={{ uri: BG_IMG }}
                 style={StyleSheet.absoluteFillObject}
