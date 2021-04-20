@@ -19,6 +19,7 @@
     "expo": "~40.0.0",
     "expo-status-bar": "~1.0.3",
     "faker": "^5.4.0",
+    "firebase": "7.9.0",
     "jest": "^26.6.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",

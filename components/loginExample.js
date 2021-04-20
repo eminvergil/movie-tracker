@@ -1,11 +1,30 @@
-import React from 'react';
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createStackNavigator } from '@react-navigation/stack';
-
+import React ,  {useState,useEffect} from 'react'
 import {View, Text, StyleSheet, TextInput,Button,TouchableHighlight} from "react-native";
+
+import auth from '@react-native-firebase/auth';
+
+
+
 
 
 const LoginExample = ({navigation}) => {
+
+    const [initializing, setInitializing] = useState(true);
+    const [user, setUser] = useState();
+
+    // Handle user state changes
+    function onAuthStateChanged(user) {
+        setUser(user);
+        if (initializing) setInitializing(false);
+    }
+
+    useEffect(() => {
+        const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+        return subscriber;
+    }, []);
+
+    // if (initializing) return null;
+
     return (
         <View style={styles.contain}>
 
@@ -18,7 +37,10 @@ const LoginExample = ({navigation}) => {
                 <Button
                     // onPress={}
                     style={{borderRadius:12}}
-                    onPress={() => navigation.navigate('Home')}
+                    onPress={() => {
+                        if(!user) navigation.navigate('Home')
+                        console.log("user not found - error login component");
+                    }}
                     title="Login"
                     color="#841584"
                     accessibilityLabel="login button"
