@@ -47,7 +47,7 @@ export default function Movies({
                 style={[
                   styles.filmitem,
                   {
-                    backgroundColor: item && item.click ? "lightblue" : "green",
+                    backgroundColor: item && item.click ? "lightblue" : "lightgreen",
                   },
                 ]}
               >

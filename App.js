@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { Home, LoginExample} from "./components";
 // import { NativeRouter, Route, Link } from "react-router-native";
-import firebase from '@react-native-firebase/app';
+import firebase from 'firebase/app';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';

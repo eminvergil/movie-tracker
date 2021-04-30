@@ -1,7 +1,7 @@
 import React ,  {useState,useEffect} from 'react'
 import {View, Text, StyleSheet, TextInput,Button,TouchableHighlight} from "react-native";
 
-import auth from '@react-native-firebase/auth';
+import firebase from 'firebase';
 
 
 
@@ -19,8 +19,9 @@ const LoginExample = ({navigation}) => {
     }
 
     useEffect(() => {
-        const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-        return subscriber;
+       firebase.auth().onAuthStateChanged(us => {
+           console.log("signed in : ", us);
+       })
     }, []);
 
     // if (initializing) return null;
