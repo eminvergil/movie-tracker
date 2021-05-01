@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Home, LoginExample} from "./components";
+import { Home, LoginExample ,SignOrLogin, SignUp} from "./components";
 // import { NativeRouter, Route, Link } from "react-router-native";
 import firebase from 'firebase/app';
 
@@ -28,11 +28,15 @@ export default function App() {
   return (
       // <FirebaseContext>
          <NavigationContainer>
-            <Stack.Navigator initialRouteName="Login">
+            <Stack.Navigator initialRouteName="SignOrLogin">
                 <Stack.Screen name="Home" component={Home} options={{ headerLeft: ()=> null,title:"", headerVisible: false,
                     headerMode: 'none',headerShown:false}}  />
                 <Stack.Screen name="Login" component={LoginExample} options={{ headerLeft: ()=> null,title:"", headerVisible: false,
                     headerMode: 'none',headerShown:false}} />
+                <Stack.Screen name="SignOrLogin" component={SignOrLogin} options={{ headerLeft: ()=> null,title:"", headerVisible: false,
+                headerMode: 'none',headerShown:false}} />
+                <Stack.Screen name="SignUp" component={SignUp} options={{ headerLeft: ()=> null,title:"", headerVisible: false,
+                headerMode: 'none',headerShown:false}} />
                 {/*<LoginExample />*/}
             </Stack.Navigator>
         </NavigationContainer>

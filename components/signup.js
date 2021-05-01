@@ -1,9 +1,9 @@
 import React ,  {useState,useEffect} from 'react'
 import {View, Text, StyleSheet, TextInput,Button,TouchableHighlight} from "react-native";
 
-import firebase from 'firebase';
+// import firebase from 'firebase';
 
-const LoginExample = ({navigation}) => {
+const SignUp = ({navigation}) => {
 
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState();
@@ -15,17 +15,16 @@ const LoginExample = ({navigation}) => {
     }
 
     useEffect(() => {
-       firebase.auth().onAuthStateChanged(us => {
-           console.log("signed in : ", us);
-       })
+       // firebase.auth().onAuthStateChanged(us => {
+       //     console.log("signed in : ", us);
+       // })
     }, []);
     // if (initializing) return null;
 
     return (
         <View style={styles.contain}>
 
-            <Text style={styles.login}>Welcome to this app</Text>
-            <Text style={[styles.login,{marginBottom: 50}]}>Please Login</Text>
+            <Text style={[styles.login,{marginBottom: 50}]}>SignUp</Text>
 
             <TextInput placeholder="Your name" maxWidth={300} width={250} textContentType="username" autoCompleteType="username" style={styles.input}/>
             <TextInput placeholder="Password"  maxWidth={300} width={250} autoCompleteType="password" textContentType="password" style={styles.input} secureTextEntry={true}/>
@@ -34,10 +33,10 @@ const LoginExample = ({navigation}) => {
                     // onPress={}
                     style={{borderRadius:12}}
                     onPress={() => {
-                        if(!user) navigation.navigate('Home')
-                        console.log("user not found - error login component");
+                        if(!user) navigation.navigate('Login')
+                        // console.log("user not found - error login component");
                     }}
-                    title="Login"
+                    title="SignUp"
                     color="#841584"
                     accessibilityLabel="login button"
                 />
@@ -47,7 +46,7 @@ const LoginExample = ({navigation}) => {
     );
 };
 
-export default LoginExample;
+export default SignUp;
 
 const styles = StyleSheet.create({
     contain: {
