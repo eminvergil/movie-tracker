@@ -2,17 +2,15 @@ import React from 'react'
 import {View, Text, StyleSheet,Button,TouchableHighlight} from "react-native";
 
 
-const SignOrLogin = ({navigation}) => {
+const NotFound = ({navigation}) => {
 
     return (
         <View style={styles.contain}>
-
-            <Text style={styles.login}>Welcome to this app</Text>
-            <Text style={[styles.login,{marginBottom: 50}]}>Please Login or Signup</Text>
-
+            <Text style={[styles.login,{marginBottom: 50}]}>404 ERROR NOT FOUND</Text>
 
             <TouchableHighlight style={styles.button}>
                 <Button
+                    // onPress={}
                     style={{borderRadius:12}}
                     onPress={() => navigation.navigate('Login')}
                     title="Login"
@@ -23,6 +21,7 @@ const SignOrLogin = ({navigation}) => {
 
             <TouchableHighlight style={styles.button}>
                 <Button
+                    // onPress={}
                     style={{borderRadius:12}}
                     onPress={() => navigation.navigate('SignUp')}
                     title="SignUp"
@@ -35,7 +34,7 @@ const SignOrLogin = ({navigation}) => {
     );
 };
 
-export default SignOrLogin;
+export default NotFound;
 
 const styles = StyleSheet.create({
     contain: {

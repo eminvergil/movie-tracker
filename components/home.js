@@ -52,7 +52,6 @@ const Home = () => {
             );
         });
 
-
         setFiltered(filteredMovies);
 
     }, []);
@@ -68,8 +67,6 @@ const Home = () => {
             <Text
                 style={{
                     fontSize: 32,
-                    justifySelf: "center",
-                    // textAlign: "start",
                     fontWeight: "bold",
                     marginBottom: 12,
                 }}

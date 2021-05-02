@@ -19,37 +19,35 @@ const SignUp = ({navigation}) => {
                 Password: password,
             }).then(() => {
                 console.log('success signup component');
+                setUser(true);
             }).catch(err => {
                 console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
+                setUser(false);
             })
 
         }).catch((err) => {
             console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
+            setUser(false);
         })
     }
 
     useEffect(() => {
-       // firebase.auth().onAuthStateChanged(us => {
-       //     console.log("signed in : ", us);
-       // })
     }, []);
 
     return (
         <View style={styles.contain}>
-
             <Text style={[styles.login,{marginBottom: 50}]}>SignUp</Text>
 
-            <TextInput placeholder="Your name" maxWidth={300} width={250} textContentType="Name" autoCompleteType="name" style={styles.input}  value={name} onChangeText={setName} />
-            <TextInput placeholder="Your name" maxWidth={300} width={250} textContentType="Email" autoCompleteType="email" style={styles.input}  value={email} onChangeText={setEmail} />
-            <TextInput placeholder="Password"  maxWidth={300} width={250} autoCompleteType="password" textContentType="password" style={styles.input} secureTextEntry={true} value={password} onChangeText={setPassword}/>
+            <TextInput placeholder="Name" maxWidth={300} width={250}  autoCompleteType="name" style={styles.input}  value={name} onChangeText={setName} />
+            <TextInput placeholder="Email" maxWidth={300} width={250}  autoCompleteType="email" style={styles.input}  value={email} onChangeText={setEmail} />
+            <TextInput placeholder="Password"  maxWidth={300} width={250} autoCompleteType="password"  style={styles.input} secureTextEntry={true} value={password} onChangeText={setPassword}/>
             <TouchableHighlight style={styles.button}>
                 <Button
-                    // onPress={}
                     style={{borderRadius:12}}
-                    onPress={() => {
-                        if(!user) navigation.navigate('Login');
-                        Sign();
-                        // console.log("user not found - error login component");
+                    onPress={async () => {
+                        await Sign();
+                        if(user) navigation.navigate('Login');
+                        if (user === false) navigation.navigate('NotFound');
                     }}
                     title="SignUp"
                     color="#841584"

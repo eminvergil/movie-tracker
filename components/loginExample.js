@@ -5,47 +5,46 @@ import firebase from 'firebase';
 
 const LoginExample = ({navigation}) => {
 
-    const [user, setUser] = useState(false);
+    const [user, setUser] = useState();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     useEffect(() => {
-       firebase.auth().onAuthStateChanged(us => {
-           console.log("signed in : ", us);
-       })
-    }, []);
+      console.log("user state: ", user);
+    }, [user]);
 
-    const LoginFirebase = () => {
-         firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
-            console.log('login success');
-            setUser(true);
-        }).catch(err => {
+    const LoginFirebase = async (e) => {
+        e.preventDefault();
+
+         await firebase.auth().signInWithEmailAndPassword(email, password).then(async () => {
+             await (!user) ?  setUser(true) : console.log("user state is already : " ,user);
+             await console.log('login success :' +" email: " + email + " pass: " + password);
+        }).catch(async err => {
+            await (user === true || user === null)  ? setUser(false) : "";
             console.log(err.message +" email: " + email + " pass: " + password );
         })
     }
 
     return (
         <View style={styles.contain}>
-
             <Text style={styles.login}>Welcome to this app</Text>
             <Text style={[styles.login,{marginBottom: 50}]}>Please Login</Text>
 
-            <TextInput placeholder="Your name" maxWidth={300} width={250} textContentType="Email" autoCompleteType="email" style={styles.input} value={email} onChangeText={setEmail} />
-            <TextInput placeholder="Password"  maxWidth={300} width={250} autoCompleteType="password" textContentType="password" style={styles.input} secureTextEntry={true} value={password} onChangeText={setPassword} />
+            <TextInput placeholder="Email" maxWidth={300} width={250}  autoCompleteType="email" style={styles.input} value={email} onChangeText={setEmail} />
+            <TextInput placeholder="Password"  maxWidth={300} width={250} autoCompleteType="password"  style={styles.input} secureTextEntry={true} value={password} onChangeText={setPassword} />
             <TouchableHighlight style={styles.button}>
                 <Button
-                    // onPress={}
                     style={{borderRadius:12}}
-                    onPress={async () => {
-                        await LoginFirebase();
+                    onPress={async (e) => {
+                        await LoginFirebase(e);
                         if (user) navigation.navigate('Home')
+                        if (user === false) navigation.navigate('NotFound');
                     }}
                     title="Login"
                     color="#841584"
                     accessibilityLabel="login button"
                 />
             </TouchableHighlight>
-
         </View>
     );
 };
@@ -54,7 +53,6 @@ export default LoginExample;
 
 const styles = StyleSheet.create({
     contain: {
-        // flexDirection: "column",
         justifyContent: "center",
         alignItems:"center",
         margin: 50,

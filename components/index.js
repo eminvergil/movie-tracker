@@ -5,3 +5,4 @@ export { default as Home } from "./home";
 export { default as LoginExample } from "./loginExample";
 export { default as SignOrLogin } from "./signOrLogin";
 export { default as SignUp } from "./signup";
+export { default as NotFound } from "./notfound";
