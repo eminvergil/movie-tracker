@@ -4,22 +4,13 @@ import {View, Text, StyleSheet, TextInput,Button,TouchableHighlight} from "react
 // import firebase from 'firebase';
 
 const SignOrLogin = ({navigation}) => {
-
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState();
 
-    // Handle user state changes
-    function onAuthStateChanged(user) {
-        setUser(user);
-        if (initializing) setInitializing(false);
-    }
-
     useEffect(() => {
-       // firebase.auth().onAuthStateChanged(us => {
-       //     console.log("signed in : ", us);
-       // })
+
     }, []);
-    // if (initializing) return null;
+
 
     return (
         <View style={styles.contain}>

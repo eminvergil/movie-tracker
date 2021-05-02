@@ -1,17 +1,31 @@
 import React ,  {useState,useEffect} from 'react'
 import {View, Text, StyleSheet, TextInput,Button,TouchableHighlight} from "react-native";
 
-// import firebase from 'firebase';
+import firebase from 'firebase';
 
 const SignUp = ({navigation}) => {
 
-    const [initializing, setInitializing] = useState(true);
+    const [name,setName] = useState("");
+    const [email,setEmail] = useState("");
+    const [password,setPassword] = useState("");
     const [user, setUser] = useState();
 
-    // Handle user state changes
-    function onAuthStateChanged(user) {
-        setUser(user);
-        if (initializing) setInitializing(false);
+
+    const Sign = () => {
+        firebase.auth().createUserWithEmailAndPassword(email,password).then(cred => {
+            return firebase.db().collection("users").doc(cred.user.uid).set({
+                Name: name,
+                Email: email,
+                Password: password,
+            }).then(() => {
+                console.log('success signup component');
+            }).catch(err => {
+                console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
+            })
+
+        }).catch((err) => {
+            console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
+        })
     }
 
     useEffect(() => {
@@ -19,21 +33,22 @@ const SignUp = ({navigation}) => {
        //     console.log("signed in : ", us);
        // })
     }, []);
-    // if (initializing) return null;
 
     return (
         <View style={styles.contain}>
 
             <Text style={[styles.login,{marginBottom: 50}]}>SignUp</Text>
 
-            <TextInput placeholder="Your name" maxWidth={300} width={250} textContentType="username" autoCompleteType="username" style={styles.input}/>
-            <TextInput placeholder="Password"  maxWidth={300} width={250} autoCompleteType="password" textContentType="password" style={styles.input} secureTextEntry={true}/>
+            <TextInput placeholder="Your name" maxWidth={300} width={250} textContentType="Name" autoCompleteType="name" style={styles.input}  value={name} onChangeText={setName} />
+            <TextInput placeholder="Your name" maxWidth={300} width={250} textContentType="Email" autoCompleteType="email" style={styles.input}  value={email} onChangeText={setEmail} />
+            <TextInput placeholder="Password"  maxWidth={300} width={250} autoCompleteType="password" textContentType="password" style={styles.input} secureTextEntry={true} value={password} onChangeText={setPassword}/>
             <TouchableHighlight style={styles.button}>
                 <Button
                     // onPress={}
                     style={{borderRadius:12}}
                     onPress={() => {
-                        if(!user) navigation.navigate('Login')
+                        if(!user) navigation.navigate('Login');
+                        Sign();
                         // console.log("user not found - error login component");
                     }}
                     title="SignUp"

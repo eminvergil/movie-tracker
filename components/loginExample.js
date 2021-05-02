@@ -5,21 +5,24 @@ import firebase from 'firebase';
 
 const LoginExample = ({navigation}) => {
 
-    const [initializing, setInitializing] = useState(true);
-    const [user, setUser] = useState();
-
-    // Handle user state changes
-    function onAuthStateChanged(user) {
-        setUser(user);
-        if (initializing) setInitializing(false);
-    }
+    const [user, setUser] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     useEffect(() => {
        firebase.auth().onAuthStateChanged(us => {
            console.log("signed in : ", us);
        })
     }, []);
-    // if (initializing) return null;
+
+    const LoginFirebase = () => {
+         firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
+            console.log('login success');
+            setUser(true);
+        }).catch(err => {
+            console.log(err.message +" email: " + email + " pass: " + password );
+        })
+    }
 
     return (
         <View style={styles.contain}>
@@ -27,15 +30,15 @@ const LoginExample = ({navigation}) => {
             <Text style={styles.login}>Welcome to this app</Text>
             <Text style={[styles.login,{marginBottom: 50}]}>Please Login</Text>
 
-            <TextInput placeholder="Your name" maxWidth={300} width={250} textContentType="username" autoCompleteType="username" style={styles.input}/>
-            <TextInput placeholder="Password"  maxWidth={300} width={250} autoCompleteType="password" textContentType="password" style={styles.input} secureTextEntry={true}/>
+            <TextInput placeholder="Your name" maxWidth={300} width={250} textContentType="Email" autoCompleteType="email" style={styles.input} value={email} onChangeText={setEmail} />
+            <TextInput placeholder="Password"  maxWidth={300} width={250} autoCompleteType="password" textContentType="password" style={styles.input} secureTextEntry={true} value={password} onChangeText={setPassword} />
             <TouchableHighlight style={styles.button}>
                 <Button
                     // onPress={}
                     style={{borderRadius:12}}
-                    onPress={() => {
-                        if(!user) navigation.navigate('Home')
-                        console.log("user not found - error login component");
+                    onPress={async () => {
+                        await LoginFirebase();
+                        if (user) navigation.navigate('Home')
                     }}
                     title="Login"
                     color="#841584"
