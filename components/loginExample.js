@@ -20,7 +20,7 @@ const LoginExample = ({navigation}) => {
              await (!user) ?  setUser(true) : console.log("user state is already : " ,user);
              await console.log('login success :' +" email: " + email + " pass: " + password);
         }).catch(async err => {
-            await (user === true || user === null)  ? setUser(false) : "";
+            await (user === true || user === null)  ? setUser(null) : "";
             console.log(err.message +" email: " + email + " pass: " + password );
         })
     }

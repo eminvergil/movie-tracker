@@ -4,12 +4,10 @@ import {View, Text, StyleSheet, TextInput,Button,TouchableHighlight} from "react
 import firebase from 'firebase';
 
 const SignUp = ({navigation}) => {
-
     const [name,setName] = useState("");
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     const [user, setUser] = useState();
-
 
     const Sign = () => {
         firebase.auth().createUserWithEmailAndPassword(email,password).then(cred => {
@@ -27,7 +25,7 @@ const SignUp = ({navigation}) => {
 
         }).catch((err) => {
             console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
-            setUser(false);
+            setUser(null);
         })
     }
 
