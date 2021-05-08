@@ -3,6 +3,10 @@ import {View, Text, StyleSheet, TextInput,Button,TouchableHighlight} from "react
 
 import firebase from 'firebase';
 
+import "firebase/firestore"
+
+
+
 const SignUp = ({navigation}) => {
     const [name,setName] = useState("");
     const [email,setEmail] = useState("");
@@ -10,13 +14,17 @@ const SignUp = ({navigation}) => {
     const [user, setUser] = useState();
 
     const Sign = () => {
+        const db = firebase.firestore();
+        firebase.database.enableLogging(true);
+
         firebase.auth().createUserWithEmailAndPassword(email,password).then(cred => {
-            return firebase.db().collection("users").doc(cred.user.uid).set({
+            return db.collection("users").doc(cred.user.uid).set({
                 Name: name,
                 Email: email,
                 Password: password,
             }).then(() => {
                 console.log('success signup component');
+                navigation.navigate('Login');
                 setUser(true);
             }).catch(err => {
                 console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
@@ -25,6 +33,7 @@ const SignUp = ({navigation}) => {
 
         }).catch((err) => {
             console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
+            navigation.navigate('NotFound');
             setUser(null);
         })
     }

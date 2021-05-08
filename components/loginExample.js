@@ -15,6 +15,7 @@ const LoginExample = ({navigation}) => {
 
     const LoginFirebase = async (e) => {
         e.preventDefault();
+        firebase.database.enableLogging(true);
 
          await firebase.auth().signInWithEmailAndPassword(email, password).then(async (cred) => {
              await (!user) ?  setUser(true) : console.log("user state is already : " ,user);
@@ -28,6 +29,7 @@ const LoginExample = ({navigation}) => {
         }).catch(async err => {
             await (user === true || user === null)  ? setUser(null) : "";
             console.log(err.message +" email: " + email + " pass: " + password );
+             navigation.navigate('NotFound');
         })
     }
 
