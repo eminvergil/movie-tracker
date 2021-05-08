@@ -22,6 +22,8 @@ const Home = () => {
     const [selectWatched,setSelectWatched] = useState(true);
 
     useEffect(() => {
+        //TODO: Buradaki initial data bilgilerini firestore dan al
+
         // init data
         //assigning DATA array to state
         for (let i = 0; i < ARRAY_LENGTH; i++) {

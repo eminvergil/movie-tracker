@@ -16,9 +16,15 @@ const LoginExample = ({navigation}) => {
     const LoginFirebase = async (e) => {
         e.preventDefault();
 
-         await firebase.auth().signInWithEmailAndPassword(email, password).then(async () => {
+         await firebase.auth().signInWithEmailAndPassword(email, password).then(async (cred) => {
              await (!user) ?  setUser(true) : console.log("user state is already : " ,user);
              await console.log('login success :' +" email: " + email + " pass: " + password);
+
+             //TODO: burada movie listesini doc a at firestore -- cred
+
+
+
+
         }).catch(async err => {
             await (user === true || user === null)  ? setUser(null) : "";
             console.log(err.message +" email: " + email + " pass: " + password );

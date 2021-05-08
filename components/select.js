@@ -1,14 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 
 import {
   StyleSheet,
-  Text,
   View,
   Button,
-  TextInput,
-  Dimensions,
-  FlatList,
-  Image,
 } from "react-native";
 
 export default function Select({selectWatched,setSelectWatched}) {

@@ -8,6 +8,7 @@ import {
   CheckBox,
   Image,
 } from "react-native";
+
 import WATCHED from "../data/watched.json";
 
 export default function Movies({
@@ -20,6 +21,9 @@ export default function Movies({
   selectWatched,
 }) {
   useEffect(() => {
+
+    //todo: buradakinide firestore dan al
+
     let filteredMovies = clicked.filter(function (array_el) {
       return (
         watched.filter(function (anotherOne_el) {
@@ -99,7 +103,7 @@ export default function Movies({
                     // console.log(new_copy[_item].title,new_copy[_item].click);
 
                     setClicked(new_copy);
-
+                    //todo:setleme kısmını hem state e hem firestore a atliacak(firestore dogru calisirsa state iptal edilecek)
                     setWatched([
                       ...watched,
                       {
