@@ -1,13 +1,14 @@
-import React ,  {useState,useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {View, Text, StyleSheet, TextInput,Button,TouchableHighlight} from "react-native";
 
 import firebase from 'firebase';
 
-const LoginExample = ({navigation}) => {
+const LoginExample = ({navigation,name}) => {
 
     const [user, setUser] = useState();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [userId,setUserId] = useState();
 
     useEffect(() => {
       console.log("user state: ", user);
@@ -15,17 +16,26 @@ const LoginExample = ({navigation}) => {
 
     const LoginFirebase = async (e) => {
         e.preventDefault();
+        // const db = firebase.firestore();
         firebase.database.enableLogging(true);
 
          await firebase.auth().signInWithEmailAndPassword(email, password).then(async (cred) => {
              await (!user) ?  setUser(true) : console.log("user state is already : " ,user);
              await console.log('login success :' +" email: " + email + " pass: " + password);
-
+             setUserId(cred.user.uid);
              //TODO: burada movie listesini doc a at firestore -- cred
-
-
-
-
+             // db.collection("movies").doc(cred.user.uid).set({
+             //     Name: name,
+             //     Email: email,
+             //     Password: password,
+             // }).then(() => {
+             //     console.log('success signup component');
+             //     navigation.navigate('Login');
+             //     setUser(true);
+             // }).catch(err => {
+             //     console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
+             //     setUser(false);
+             // })
         }).catch(async err => {
             await (user === true || user === null)  ? setUser(null) : "";
             console.log(err.message +" email: " + email + " pass: " + password );
@@ -45,7 +55,7 @@ const LoginExample = ({navigation}) => {
                     style={{borderRadius:12}}
                     onPress={async (e) => {
                         await LoginFirebase(e);
-                        if (user) navigation.navigate('Home')
+                        if (user) navigation.navigate('Home',{user,email,password,name,userId})
                         if (user === false) navigation.navigate('NotFound');
                     }}
                     title="Login"
@@ -54,6 +64,7 @@ const LoginExample = ({navigation}) => {
                 />
             </TouchableHighlight>
         </View>
+
     );
 };
 

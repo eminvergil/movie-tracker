@@ -4,8 +4,9 @@ import {ARRAY_LENGTH, BG_IMG} from "../data/helpers";
 import {Movies, Select} from "./index";
 import DATA from "../data/context-filmovie.json";
 import WATCHED from "../data/watched.json";
+import firebase from "firebase";
 
-const Home = () => {
+const Home = ({userState,name,password,email,user,userId}) => {
     const [clicked, setClicked] = useState([
         {
             key: "",
@@ -23,6 +24,7 @@ const Home = () => {
 
     useEffect(() => {
         //TODO: Buradaki initial data bilgilerini firestore dan al
+        console.log("user state: " + userState);
 
         // init data
         //assigning DATA array to state
@@ -36,6 +38,14 @@ const Home = () => {
                 release_date: DATA[i].release_date,
             };
         }
+        // init clicked state to firestore
+        const db = firebase.firestore();
+        db.collection("movies").doc(userId).set({clicked
+        }).then(() => {
+            console.log('success setting movie data');
+        }).catch(err => {
+            console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
+        })
 
         // init watched data
         for (let i = 0; i < WATCHED.length; i++) {
@@ -60,28 +70,31 @@ const Home = () => {
 
 
     return (
-        <View style={[styles.container, { marginTop: 0,paddingVertical:24 }]}>
-            <Image
-                source={{ uri: BG_IMG }}
-                style={StyleSheet.absoluteFillObject}
-                blurRadius={150}
-            />
-            <Text
-                style={{
-                    fontSize: 32,
-                    fontWeight: "bold",
-                    marginBottom: 12,
-                }}
-            >
-                Movie Tracker
-            </Text>
+        <>
+            <View style={[styles.container, { marginTop: 0,paddingVertical:24 }]}>
+                <Image
+                    source={{ uri: BG_IMG }}
+                    style={StyleSheet.absoluteFillObject}
+                    blurRadius={150}
+                />
+                <Text
+                    style={{
+                        fontSize: 32,
+                        fontWeight: "bold",
+                        marginBottom: 12,
+                    }}
+                >
+                    Movie Tracker
+                </Text>
 
-            {/*<Login/>*/}
+                {/*<Login/>*/}
 
-            <Select selectWatched={selectWatched} setSelectWatched={setSelectWatched}/>
+                <Select selectWatched={selectWatched} setSelectWatched={setSelectWatched}/>
 
-            <Movies clicked={clicked} setClicked={setClicked} watched={watched} setWatched={setWatched} filtered={filtered} setFiltered={setFiltered} selectWatched={selectWatched} setSelectWatched={setSelectWatched}/>
-        </View>
+                <Movies clicked={clicked} setClicked={setClicked} watched={watched} setWatched={setWatched} filtered={filtered} setFiltered={setFiltered} selectWatched={selectWatched} setSelectWatched={setSelectWatched}/>
+            </View>
+        </>
+
     );
 };
 

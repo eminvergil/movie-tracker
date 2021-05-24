@@ -13,4 +13,10 @@ export const firebaseConfig = {
 
 };
 
+const userContext = {
+    email: "init",
+    password: "init"
+}
+
 // export const FirebaseContext = createContext(firebaseConfig);
+export const UserContext = createContext(userContext);

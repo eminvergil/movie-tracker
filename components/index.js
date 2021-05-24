@@ -6,3 +6,4 @@ export { default as LoginExample } from "./loginExample";
 export { default as SignOrLogin } from "./signOrLogin";
 export { default as SignUp } from "./signup";
 export { default as NotFound } from "./notfound";
+export { default as ContainerApp } from "./container";

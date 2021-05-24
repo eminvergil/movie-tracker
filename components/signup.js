@@ -53,7 +53,7 @@ const SignUp = ({navigation}) => {
                     style={{borderRadius:12}}
                     onPress={async () => {
                         await Sign();
-                        if(user) navigation.navigate('Login');
+                        if(user) navigation.navigate('Login',{user,name,email,password});
                         if (user === false) navigation.navigate('NotFound');
                     }}
                     title="SignUp"
