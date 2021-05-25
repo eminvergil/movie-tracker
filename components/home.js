@@ -39,13 +39,30 @@ const Home = ({userState,name,password,email,user,userId}) => {
             };
         }
         // init clicked state to firestore
+        let docExists = false;
         const db = firebase.firestore();
-        db.collection("movies").doc(userId).set({clicked
-        }).then(() => {
-            console.log('success setting movie data');
-        }).catch(err => {
-            console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
-        })
+        db.collection('movies').doc(userId).get()
+            .then((docSnapshot) => {
+                if (docSnapshot.exists) {
+                    if(docSnapshot.get("clicked").data !== null){
+                        docExists = true;
+                        console.log("clicked array exists!");
+                    }
+                    docExists = false;
+                }
+            }).catch(err => {
+                console.log('Error getting document', err);
+            });
+
+        if(!docExists){
+            db.collection("movies").doc(userId).set({clicked
+            }).then(() => {
+                console.log('success setting movie data');
+            }).catch(err => {
+                console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
+            })
+        }
+
 
         // init watched data
         for (let i = 0; i < WATCHED.length; i++) {
