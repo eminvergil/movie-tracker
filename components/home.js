@@ -41,7 +41,9 @@ const Home = ({userState,name,password,email,user,userId}) => {
         // init clicked state to firestore
         let docExists = false;
         const db = firebase.firestore();
-        db.collection('movies').doc(userId).get()
+        let userID2 = firebase.auth().currentUser.uid;
+
+        db.collection('movies').doc(userID2).get()
             .then((docSnapshot) => {
                 if (docSnapshot.exists) {
                     if(docSnapshot.get("clicked").data !== null){
@@ -55,7 +57,7 @@ const Home = ({userState,name,password,email,user,userId}) => {
             });
 
         if(!docExists){
-            db.collection("movies").doc(userId).set({clicked
+            db.collection("movies").doc(userID2).set({clicked
             }).then(() => {
                 console.log('success setting movie data');
             }).catch(err => {
