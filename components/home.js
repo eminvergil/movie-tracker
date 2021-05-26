@@ -64,6 +64,9 @@ const Home = ({userState,name,password,email,user,userId}) => {
                 console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
             })
         }
+        else{
+            db.collection("movies").doc(userID2).get().then(doc => setClicked(doc.data().clicked));
+        }
 
 
         // init watched data
