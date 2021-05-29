@@ -79,19 +79,6 @@ const Home = ({userState,name,password,email,user,userId}) => {
         }
 
         // init watched data to firestore
-        db.collection('movies').doc(userID2).get()
-            .then((docSnapshot) => {
-                if (docSnapshot.exists) {
-                    if(docSnapshot.get("clicked").data !== null){
-                        docExists = true;
-                        console.log("clicked array exists!");
-                    }
-                    docExists = false;
-                }
-            }).catch(err => {
-            console.log('Error getting document', err);
-        });
-
         if(!docExists){
             db.collection("watched").doc(userID2).set({watched
             }).then(() => {
@@ -113,6 +100,19 @@ const Home = ({userState,name,password,email,user,userId}) => {
         });
 
         setFiltered(filteredMovies);
+
+        // init filtered movie data to firestore
+        if(!docExists){
+            db.collection("filtered").doc(userID2).set({filtered
+            }).then(() => {
+                console.log('success setting filtered movie data');
+            }).catch(err => {
+                console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
+            })
+        }
+        else{
+            db.collection("filtered").doc(userID2).get().then(doc => setFiltered(doc.data().filtered));
+        }
 
     }, []);
 
