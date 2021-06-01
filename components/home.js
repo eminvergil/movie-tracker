@@ -79,7 +79,20 @@ const Home = ({userState,name,password,email,user,userId}) => {
         }
 
         // init watched data to firestore
-        if(!docExists){
+        let watchedExists = false;
+        db.collection('watched').doc(userID2).get()
+            .then((docSnapshot) => {
+                if (docSnapshot.exists) {
+                    if(docSnapshot.get("watched").data !== null){
+                        watchedExists = true;
+                        console.log("clicked array exists!");
+                    }
+                    watchedExists = false;
+                }
+            }).catch(err => {
+            console.log('Error getting document', err);
+        });
+        if(!watchedExists){
             db.collection("watched").doc(userID2).set({watched
             }).then(() => {
                 console.log('success setting movie data');
@@ -102,17 +115,17 @@ const Home = ({userState,name,password,email,user,userId}) => {
         setFiltered(filteredMovies);
 
         // init filtered movie data to firestore
-        if(!docExists){
-            db.collection("filtered").doc(userID2).set({filtered
-            }).then(() => {
-                console.log('success setting filtered movie data');
-            }).catch(err => {
-                console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
-            })
-        }
-        else{
-            db.collection("filtered").doc(userID2).get().then(doc => setFiltered(doc.data().filtered));
-        }
+        // if(!docExists && filtered != null){
+        //     db.collection("filtered").doc(userID2).set({filtered
+        //     }).then(() => {
+        //         console.log('success setting filtered movie data');
+        //     }).catch(err => {
+        //         console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
+        //     })
+        // }
+        // else{
+        //     db.collection("filtered").doc(userID2).get().then(doc => setFiltered(doc.data().filtered));
+        // }
 
     }, []);
 

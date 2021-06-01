@@ -8,8 +8,8 @@ import {
   CheckBox,
   Image,
 } from "react-native";
+import firebase from "firebase";
 
-import WATCHED from "../data/watched.json";
 
 export default function Movies({
   clicked,
@@ -32,7 +32,39 @@ export default function Movies({
       );
     });
 
-    setFiltered(filteredMovies);
+      setFiltered(filteredMovies);
+
+      let docExists = false;
+      const db = firebase.firestore();
+      let userID2 = firebase.auth().currentUser.uid;
+
+      db.collection('filtered').doc(userID2).get()
+          .then((docSnapshot) => {
+              if (docSnapshot.exists) {
+                  if(docSnapshot.get("filtered").data !== null){
+                      docExists = true;
+                      console.log("filtered array exists!");
+                  }
+                  docExists = false;
+              }
+          }).catch(err => {
+          console.log('Error getting document', err);
+      });
+
+      if(!docExists && filtered != null){
+          db.collection("filtered").doc(userID2).set({filtered
+          }).then(() => {
+              console.log('success setting filtered movie data');
+          }).catch(err => {
+              console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
+          })
+      }
+      else{
+          db.collection("filtered").doc(userID2).get().then(doc => setFiltered(doc.data().filtered));
+      }
+
+      if(docExists)  db.collection("filtered").doc(userID2).get().then(doc => setFiltered(doc.data().filtered));
+
   }, [watched]);
 
   return (
@@ -110,9 +142,26 @@ export default function Movies({
                         key: new_copy[_item].key,
                         title: new_copy[_item].title,
                         click: new_copy[_item].click,
+                      image: new_copy[_item].image,
+                          description: new_copy[_item].description,
+                          release_date: new_copy[_item].release_date,
                       },
                     ]);
+
+                      const db = firebase.firestore();
+                      let userID2 = firebase.auth().currentUser.uid;
+                      // init watched data to firestore
+
+                    db.collection("watched").doc(userID2).set({watched
+                      }).then(() => {
+                          console.log('success setting filtered movie data');
+                      }).catch(err => {
+                          console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
+                      })
+
                   }}
+
+
                 />
               </View>
             );

@@ -12,6 +12,7 @@ const LoginExample = ({navigation,name}) => {
 
     useEffect(() => {
       console.log("user state: ", user);
+      (user) ? navigation.navigate('Home',{user,email,password,name,userId}) : "";
     }, [user]);
 
     const LoginFirebase = async (e) => {
