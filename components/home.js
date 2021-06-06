@@ -38,38 +38,34 @@ const Home = ({userState,name,password,email,user,userId}) => {
                 release_date: DATA[i].release_date,
             };
         }
-        // init clicked state to firestore
+        // init MOVIES COLLECTION state to firestore
         let docExists = false;
         const db = firebase.firestore();
         let userID2 = firebase.auth().currentUser.uid;
 
         db.collection('movies').doc(userID2).get()
-            .then((docSnapshot) => {
-                if (docSnapshot.exists) {
-                    if(docSnapshot.get("clicked").data !== null){
+            .then((doc) => {
+                if (doc.exists) {
                         docExists = true;
-                        console.log("clicked array exists!");
+                        console.log("### MOVIES COLLECTION exists!");
+                        setClicked(doc.data().clicked);
+                    }else{
+                        docExists = false;
+                        db.collection("movies").doc(userID2).set({clicked
+                        }).then(() => {
+                            console.log('success setting movie data');
+                        }).catch(err => {
+                            console.log("setting movie data ERROR: ",err.message );
+                        })
                     }
-                    docExists = false;
-                }
+
             }).catch(err => {
-                console.log('Error getting document', err);
+                console.log('### MOVIES COLLECTION  ERROR: ', err);
             });
 
-        if(!docExists){
-            db.collection("movies").doc(userID2).set({clicked
-            }).then(() => {
-                console.log('success setting movie data');
-            }).catch(err => {
-                console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
-            })
-        }
-        else{
-            db.collection("movies").doc(userID2).get().then(doc => setClicked(doc.data().clicked));
-        }
 
 
-        // init watched data
+        // init WATCHED COLLECTION data
         for (let i = 0; i < WATCHED.length; i++) {
             watched[i] = {
                 key: WATCHED[i].key,
@@ -78,35 +74,30 @@ const Home = ({userState,name,password,email,user,userId}) => {
             }
         }
 
-        // init watched data to firestore
-        let watchedExists = false;
         db.collection('watched').doc(userID2).get()
-            .then((docSnapshot) => {
-                if (docSnapshot.exists) {
-                    if(docSnapshot.get("watched").data !== null){
-                        watchedExists = true;
-                        console.log("clicked array exists!");
-                    }
-                    watchedExists = false;
+            .then((doc) => {
+                if (doc.exists) {
+                    console.log("### WATCHED collection exists!");
+                    setWatched(doc.data().watched);
+                }else{
+                    console.log("### WATCHED collection  NOT exists!");
+                    // doc.data().set({watched});
+                    db.collection("watched")
+                        .doc(userID2)
+                        .set({watched}).then(() => {
+                            console.log('success setting watched data');
+                        }).catch(err => {
+                            console.log("setting watched data ERROR: ",err.message );
+                        })
                 }
             }).catch(err => {
-            console.log('Error getting document', err);
+                console.log('### watched collection ERROR: ', err);
         });
-        if(!watchedExists){
-            db.collection("watched").doc(userID2).set({watched
-            }).then(() => {
-                console.log('success setting movie data');
-            }).catch(err => {
-                console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
-            })
-        }
-        else{
-            db.collection("watched").doc(userID2).get().then(doc => setWatched(doc.data().watched));
-        }
 
-        const filteredMovies = clicked.filter(function (array_el) {
-            return (
-                watched.filter(function (anotherOne_el) {
+        // INIT FILTERED COLLECTION DATA
+        const filteredMovies = clicked.filter(function async (array_el) {
+             return (
+                 watched.filter(function (anotherOne_el) {
                     return anotherOne_el.key == array_el.key;
                 }).length == 0
             );
@@ -114,18 +105,26 @@ const Home = ({userState,name,password,email,user,userId}) => {
 
         setFiltered(filteredMovies);
 
-        // init filtered movie data to firestore
-        // if(!docExists && filtered != null){
-        //     db.collection("filtered").doc(userID2).set({filtered
-        //     }).then(() => {
-        //         console.log('success setting filtered movie data');
-        //     }).catch(err => {
-        //         console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
-        //     })
-        // }
-        // else{
-        //     db.collection("filtered").doc(userID2).get().then(doc => setFiltered(doc.data().filtered));
-        // }
+        db.collection('filtered').doc(userID2).get()
+            .then(async (doc) => {
+                if (doc.exists) {
+                    console.log("### FILTERED collection exists!");
+                    setFiltered(doc.data().filtered);
+                }else{
+                    console.log("### FILTERED collection NOT exists!");
+                    // doc.data().set({filtered});
+                    await db.collection("filtered")
+                        .doc(userID2)
+                        .set({filtered}).then(() => {
+                        console.log('success setting filtered data');
+                    }).catch(err => {
+                        console.log("setting filtered data ERROR: ",err.message );
+                    })
+                }
+
+            }).catch(err => {
+                console.log('### filtered collection ERROR: ', err);
+        });
 
     }, []);
 
@@ -143,6 +142,9 @@ const Home = ({userState,name,password,email,user,userId}) => {
                         fontSize: 32,
                         fontWeight: "bold",
                         marginBottom: 12,
+                        justifySelf: "center",
+                        justifyContent: "center",
+                        textAlign: "center",
                     }}
                 >
                     Movie Tracker

@@ -20,9 +20,9 @@ export default function Movies({
   setFiltered,
   selectWatched,
 }) {
+
   useEffect(() => {
 
-    //todo: buradakinide firestore dan al
 
     let filteredMovies = clicked.filter(function (array_el) {
       return (
@@ -34,36 +34,7 @@ export default function Movies({
 
       setFiltered(filteredMovies);
 
-      let docExists = false;
-      const db = firebase.firestore();
-      let userID2 = firebase.auth().currentUser.uid;
 
-      db.collection('filtered').doc(userID2).get()
-          .then((docSnapshot) => {
-              if (docSnapshot.exists) {
-                  if(docSnapshot.get("filtered").data !== null){
-                      docExists = true;
-                      console.log("filtered array exists!");
-                  }
-                  docExists = false;
-              }
-          }).catch(err => {
-          console.log('Error getting document', err);
-      });
-
-      if(!docExists && filtered != null){
-          db.collection("filtered").doc(userID2).set({filtered
-          }).then(() => {
-              console.log('success setting filtered movie data');
-          }).catch(err => {
-              console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
-          })
-      }
-      else{
-          db.collection("filtered").doc(userID2).get().then(doc => setFiltered(doc.data().filtered));
-      }
-
-      if(docExists)  db.collection("filtered").doc(userID2).get().then(doc => setFiltered(doc.data().filtered));
 
   }, [watched]);
 
@@ -150,14 +121,38 @@ export default function Movies({
 
                       const db = firebase.firestore();
                       let userID2 = firebase.auth().currentUser.uid;
-                      // init watched data to firestore
+                      db.collection('watched').doc(userID2).get()
+                          .then((doc) => {
+                              if (doc.exists) {
+                                  console.log("### watched collection updated!");
+                                  db.collection("watched")
+                                      .doc(userID2)
+                                      .set({watched}).then(() => {
+                                      console.log('success updating watched data');
+                                  }).catch(err => {
+                                      console.log("updating watched data ERROR: ",err.message );
+                                  })
+                              }
+                          }).catch(err => {
+                            console.log("### watched collection update ERROR: ", err);
+                      });
 
-                    db.collection("watched").doc(userID2).set({watched
-                      }).then(() => {
-                          console.log('success setting filtered movie data');
-                      }).catch(err => {
-                          console.log(err.message +" name: " + name +" email: " + email + " pass: " + password );
-                      })
+                      db.collection('movies').doc(userID2).get()
+                          .then((doc) => {
+                              if (doc.exists) {
+                                  console.log("### MOVIES COLLECTION updated!");
+                                  db.collection("movies")
+                                      .doc(userID2)
+                                      .set({clicked}).then(() => {
+                                      console.log('success updating movies data');
+                                  }).catch(err => {
+                                      console.log("updating watched data ERROR: ",err.message );
+                                  })
+                              }
+
+                          }).catch(err => {
+                            console.log('### MOVIES COLLECTION ERROR: ', err);
+                      });
 
                   }}
 
