@@ -19,6 +19,7 @@ export default function Movies({
   filtered,
   setFiltered,
   selectWatched,
+    db,userID2
 }) {
 
   useEffect(() => {
@@ -37,6 +38,68 @@ export default function Movies({
 
 
   }, [watched]);
+
+   let handleMovieDataChange = (item) => {
+        const _item = clicked.findIndex((it) => it.key == item.key);
+        console.log("#### CLICKED BUTTON #########");
+
+        // const db = firebase.firestore();
+        // let userID2 = firebase.auth().currentUser.uid;
+
+        let new_copy = [...clicked];
+
+        new_copy[_item] = {
+            ...new_copy[_item],
+            click: true,
+        };
+
+        setClicked(new_copy);
+        setWatched([
+           ...watched,
+           {
+               key: new_copy[_item].key,
+               title: new_copy[_item].title,
+               click: new_copy[_item].click,
+               image: new_copy[_item].image,
+               description: new_copy[_item].description,
+               release_date: new_copy[_item].release_date,
+           },
+       ]);
+
+        db.collection('watched').doc(userID2).get()
+            .then((doc) => {
+                if (doc.exists) {
+                    console.log("### watched collection updated!");
+                    db.collection("watched")
+                        .doc(userID2)
+                        .set({watched}).then(() => {
+                        console.log('success updating watched data');
+                    }).catch(err => {
+                        console.log("updating watched data ERROR: ",err.message );
+                    })
+                }
+            }).catch(err => {
+                console.log("### watched collection update ERROR: ", err);
+            });
+
+        db.collection('movies').doc(userID2).get()
+            .then((doc) => {
+                if (doc.exists) {
+                    console.log("### MOVIES COLLECTION updated!");
+                    db.collection("movies")
+                        .doc(userID2)
+                        .set({clicked}).then(() => {
+                        console.log('success updating movies data');
+                    }).catch(err => {
+                        console.log("updating watched data ERROR: ",err.message );
+                    })
+                }
+
+            }).catch(err => {
+                console.log('### MOVIES COLLECTION ERROR: ', err);
+            });
+
+    }
 
   return (
     <>
@@ -93,67 +156,9 @@ export default function Movies({
                     justifySelf: "center",
                   }}
                   // title="Press me"
-                  value={item && item.click}
+                  value={item.click}
                   onValueChange={() => {
-                    const _item = clicked.findIndex((it) => it.key == item.key);
-
-                    let new_copy = [...clicked];
-
-                    new_copy[_item] = {
-                      ...new_copy[_item],
-                      click: true,
-                    };
-                    // console.log(new_copy[_item].title,new_copy[_item].click);
-
-                    setClicked(new_copy);
-                    //todo:setleme kısmını hem state e hem firestore a atliacak(firestore dogru calisirsa state iptal edilecek)
-                    setWatched([
-                      ...watched,
-                      {
-                        key: new_copy[_item].key,
-                        title: new_copy[_item].title,
-                        click: new_copy[_item].click,
-                      image: new_copy[_item].image,
-                          description: new_copy[_item].description,
-                          release_date: new_copy[_item].release_date,
-                      },
-                    ]);
-
-                      const db = firebase.firestore();
-                      let userID2 = firebase.auth().currentUser.uid;
-                      db.collection('watched').doc(userID2).get()
-                          .then((doc) => {
-                              if (doc.exists) {
-                                  console.log("### watched collection updated!");
-                                  db.collection("watched")
-                                      .doc(userID2)
-                                      .set({watched}).then(() => {
-                                      console.log('success updating watched data');
-                                  }).catch(err => {
-                                      console.log("updating watched data ERROR: ",err.message );
-                                  })
-                              }
-                          }).catch(err => {
-                            console.log("### watched collection update ERROR: ", err);
-                      });
-
-                      db.collection('movies').doc(userID2).get()
-                          .then((doc) => {
-                              if (doc.exists) {
-                                  console.log("### MOVIES COLLECTION updated!");
-                                  db.collection("movies")
-                                      .doc(userID2)
-                                      .set({clicked}).then(() => {
-                                      console.log('success updating movies data');
-                                  }).catch(err => {
-                                      console.log("updating watched data ERROR: ",err.message );
-                                  })
-                              }
-
-                          }).catch(err => {
-                            console.log('### MOVIES COLLECTION ERROR: ', err);
-                      });
-
+                    handleMovieDataChange(item);
                   }}
 
 

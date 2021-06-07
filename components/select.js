@@ -17,7 +17,7 @@ export default function Select({selectWatched,setSelectWatched}) {
     <View style={styles.btnlist}>
       <View style={styles.margin}>
         <Button
-          title="Watched"
+          title="NOT Watched"
           disabled={selectWatched}
           color={selectWatched ? "green" : "red"}
           onPress={() => setSelectWatched(!selectWatched)}
@@ -26,7 +26,7 @@ export default function Select({selectWatched,setSelectWatched}) {
       </View>
       <View style={styles.margin}>
         <Button
-          title="NOT Watched"
+          title="Watched"
           disabled={!selectWatched}
           color={selectWatched ? "green" : "red"}
           onPress={() => setSelectWatched(!selectWatched)}

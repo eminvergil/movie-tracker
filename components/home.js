@@ -22,13 +22,17 @@ const Home = ({userState,name,password,email,user,userId}) => {
     const [watched,setWatched] = useState([]);
     const [selectWatched,setSelectWatched] = useState(true);
 
+
+    const db = firebase.firestore();
+    let userID2 = firebase.auth().currentUser.uid;
+
     useEffect(() => {
         //TODO: Buradaki initial data bilgilerini firestore dan al
         console.log("user state: " + userState);
 
         // init data
         //assigning DATA array to state
-        for (let i = 0; i < ARRAY_LENGTH; i++) {
+        for (let i = 0 ; i < ARRAY_LENGTH; i++) {
             clicked[i] = {
                 key: DATA[i].key,
                 click: false,
@@ -40,8 +44,6 @@ const Home = ({userState,name,password,email,user,userId}) => {
         }
         // init MOVIES COLLECTION state to firestore
         let docExists = false;
-        const db = firebase.firestore();
-        let userID2 = firebase.auth().currentUser.uid;
 
         db.collection('movies').doc(userID2).get()
             .then((doc) => {
@@ -78,6 +80,7 @@ const Home = ({userState,name,password,email,user,userId}) => {
             .then((doc) => {
                 if (doc.exists) {
                     console.log("### WATCHED collection exists!");
+                    // console.log(doc.data().watched);
                     setWatched(doc.data().watched);
                 }else{
                     console.log("### WATCHED collection  NOT exists!");
@@ -105,26 +108,26 @@ const Home = ({userState,name,password,email,user,userId}) => {
 
         setFiltered(filteredMovies);
 
-        db.collection('filtered').doc(userID2).get()
-            .then(async (doc) => {
-                if (doc.exists) {
-                    console.log("### FILTERED collection exists!");
-                    setFiltered(doc.data().filtered);
-                }else{
-                    console.log("### FILTERED collection NOT exists!");
-                    // doc.data().set({filtered});
-                    await db.collection("filtered")
-                        .doc(userID2)
-                        .set({filtered}).then(() => {
-                        console.log('success setting filtered data');
-                    }).catch(err => {
-                        console.log("setting filtered data ERROR: ",err.message );
-                    })
-                }
-
-            }).catch(err => {
-                console.log('### filtered collection ERROR: ', err);
-        });
+        // db.collection('filtered').doc(userID2).get()
+        //     .then(async (doc) => {
+        //         if (doc.exists) {
+        //             console.log("### FILTERED collection exists!");
+        //             setFiltered(doc.data().filtered);
+        //         }else{
+        //             console.log("### FILTERED collection NOT exists!");
+        //             // doc.data().set({filtered});
+        //             await db.collection("filtered")
+        //                 .doc(userID2)
+        //                 .set({filtered}).then(() => {
+        //                 console.log('success setting filtered data');
+        //             }).catch(err => {
+        //                 console.log("setting filtered data ERROR: ",err.message );
+        //             })
+        //         }
+        //
+        //     }).catch(err => {
+        //         console.log('### filtered collection ERROR: ', err);
+        // });
 
     }, []);
 
@@ -142,8 +145,6 @@ const Home = ({userState,name,password,email,user,userId}) => {
                         fontSize: 32,
                         fontWeight: "bold",
                         marginBottom: 12,
-                        justifySelf: "center",
-                        justifyContent: "center",
                         textAlign: "center",
                     }}
                 >
@@ -154,7 +155,7 @@ const Home = ({userState,name,password,email,user,userId}) => {
 
                 <Select selectWatched={selectWatched} setSelectWatched={setSelectWatched}/>
 
-                <Movies clicked={clicked} setClicked={setClicked} watched={watched} setWatched={setWatched} filtered={filtered} setFiltered={setFiltered} selectWatched={selectWatched} setSelectWatched={setSelectWatched}/>
+                <Movies clicked={clicked} setClicked={setClicked} watched={watched} setWatched={setWatched} filtered={filtered} setFiltered={setFiltered} selectWatched={selectWatched} setSelectWatched={setSelectWatched} db={db} userID2={userID2}/>
             </View>
         </>
 
