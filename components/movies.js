@@ -9,6 +9,7 @@ import {
   Image,
 } from "react-native";
 import firebase from "firebase";
+import {windowHeight} from "../data/helpers";
 
 
 export default function Movies({
@@ -40,31 +41,37 @@ export default function Movies({
   }, [watched]);
 
    let handleMovieDataChange = (item) => {
-        const _item = clicked.findIndex((it) => it.key == item.key);
+        const _item = clicked.findIndex((it) => it.key == item.key && it.name == item.name && it.title == item.title);
         console.log("#### CLICKED BUTTON #########");
 
-        // const db = firebase.firestore();
-        // let userID2 = firebase.auth().currentUser.uid;
 
         let new_copy = [...clicked];
 
         new_copy[_item] = {
             ...new_copy[_item],
-            click: true,
+            click: selectWatched ? true : false,
         };
 
         setClicked(new_copy);
-        setWatched([
-           ...watched,
-           {
-               key: new_copy[_item].key,
-               title: new_copy[_item].title,
-               click: new_copy[_item].click,
-               image: new_copy[_item].image,
-               description: new_copy[_item].description,
-               release_date: new_copy[_item].release_date,
-           },
-       ]);
+        if(selectWatched){
+            setWatched([
+                ...watched,
+                {
+                    key: new_copy[_item].key,
+                    title: new_copy[_item].title,
+                    click: new_copy[_item].click,
+                    image: new_copy[_item].image,
+                    description: new_copy[_item].description,
+                    release_date: new_copy[_item].release_date,
+                },
+            ]);
+        }else{
+            let _index = watched.findIndex((it) => it.key == item.key && it.name == item.name && it.title == item.title);
+            let watched_copy = [...watched];
+            watched_copy.splice(_index,1);
+            setWatched(watched_copy);
+        }
+
 
         db.collection('watched').doc(userID2).get()
             .then((doc) => {
@@ -101,10 +108,74 @@ export default function Movies({
 
     }
 
-  return (
+    let handleWatchedMovieDataChange = (item) => {
+        const _item = clicked.findIndex((it) => it.key == item.key);
+
+        let new_copy = [...clicked];
+
+        new_copy[_item] = {
+            ...new_copy[_item],
+            click: false,
+        };
+
+        setClicked(new_copy);
+
+        let watched_copy = [...watched];
+        watched_copy.splice(_item,1);
+        setWatched(watched_copy);
+
+        // setWatched([
+        //     ...watched,
+        //     {
+        //         key: new_copy[_item].key,
+        //         title: new_copy[_item].title,
+        //         click: new_copy[_item].click,
+        //         image: new_copy[_item].image,
+        //         description: new_copy[_item].description,
+        //         release_date: new_copy[_item].release_date,
+        //     },
+        // ]);
+
+        // db.collection('watched').doc(userID2).get()
+        //     .then((doc) => {
+        //         if (doc.exists) {
+        //             console.log("### watched collection updated!");
+        //             db.collection("watched")
+        //                 .doc(userID2)
+        //                 .set({watched}).then(() => {
+        //                 console.log('success updating watched data');
+        //             }).catch(err => {
+        //                 console.log("updating watched data ERROR: ",err.message );
+        //             })
+        //         }
+        //     }).catch(err => {
+        //     console.log("### watched collection update ERROR: ", err);
+        // });
+        //
+        // db.collection('movies').doc(userID2).get()
+        //     .then((doc) => {
+        //         if (doc.exists) {
+        //             console.log("### MOVIES COLLECTION updated!");
+        //             db.collection("movies")
+        //                 .doc(userID2)
+        //                 .set({clicked}).then(() => {
+        //                 console.log('success updating movies data');
+        //             }).catch(err => {
+        //                 console.log("updating watched data ERROR: ",err.message );
+        //             })
+        //         }
+        //
+        //     }).catch(err => {
+        //     console.log('### MOVIES COLLECTION ERROR: ', err);
+        // });
+
+    }
+
+    return (
     <>
       <View style={styles.movielist}>
         <FlatList
+            style={{ maxHeight:windowHeight - windowHeight*20/100 }}
           data={selectWatched ? filtered : watched}
           // horizontal
           showHorizontalScrollIndicator={false}
@@ -117,7 +188,7 @@ export default function Movies({
                 style={[
                   styles.filmitem,
                   {
-                    backgroundColor: item && item.click ? "lightblue" : "lightgreen",
+                    backgroundColor: selectWatched ? "lightblue" : "lightgreen", //item && item.click ? "lightblue" : "lightgreen",
                   },
                 ]}
               >
@@ -155,8 +226,7 @@ export default function Movies({
                     alignSelf: "center",
                     justifySelf: "center",
                   }}
-                  // title="Press me"
-                  value={item.click}
+                  value={selectWatched ? item.click : !item.click}
                   onValueChange={() => {
                     handleMovieDataChange(item);
                   }}
